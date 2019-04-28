@@ -6,7 +6,7 @@
  */
 const middy = require('middy');
 const {
-  functionShield, ssm, doNotWaitForEmptyEventLoop,
+  functionShield, ssm, doNotWaitForEmptyEventLoop, cors,
 } = require('middy/middlewares');
 
 const { STAGE } = process.env;
@@ -16,10 +16,10 @@ const { initialMysqlPool } = require('@kevinwang0316/lambda-middlewares/mysql');
 // const functionShield = require('./function-shield');
 
 module.exports = func => middy(func)
-  // .use(cors({
-  //   origin: 'https://kairoscope.resonancepath.com',
-  //   credentials: true,
-  // }))
+  .use(cors({
+    origin: '*',
+    credentials: true,
+  }))
   .use(ssm({
     cache: true,
     cacheExpiryInMillis: 3 * 60 * 1000,
@@ -27,17 +27,17 @@ module.exports = func => middy(func)
     // The parameters will just live in memory for the security concern.
     setToContext: true,
     names: {
-      dbHost: `/sscrg/${STAGE}/db_host`,
-      dbUser: `/sscrg/${STAGE}/db_user`,
-      dbPassword: `/sscrg/${STAGE}/db_password`,
-      dbName: `/sscrg/${STAGE}/db_name`,
-      FUNCTION_SHIELD_TOKEN: `/sscrg/${STAGE}/function_shield_token`,
+      dbHost: `/nintex/${STAGE}/db_host`,
+      dbUser: `/nintex/${STAGE}/db_user`,
+      dbPassword: `/nintex/${STAGE}/db_password`,
+      dbName: `/nintex/${STAGE}/db_name`,
+      FUNCTION_SHIELD_TOKEN: `/nintex/${STAGE}/function_shield_token`,
     },
   }))
   .use(sampleLogging())
   .use(functionShield({
     policy: {
-      outbound_connectivity: 'block',
+      outbound_connectivity: 'alert',
       read_write_tmp: 'block',
       create_child_process: 'block',
       read_handler: 'block',
