@@ -134,3 +134,16 @@ functions:
           Resource: arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:Fetch_Health_Score
       layers:
         - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
+
+  add-office-workflows:
+    handler: functions/add-office-workflows.handler
+    events:
+      - http:
+          path: /officeworkflows
+          method: post
+          cors: true
+    memorySize: 256
+    environment:
+      async_metrics: true
+    layers:
+      - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
