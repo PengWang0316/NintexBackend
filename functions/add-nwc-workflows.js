@@ -21,25 +21,27 @@ const sendMessage = messages => sqs.sendMessageBatch({
 }).promise();
 
 const handler = async (event, context) => {
-  const { workflows } = JSON.parse(event.body);
+  const { workflows, keys } = JSON.parse(event.body);
   try {
     await trackExecTime('MySQL Batch Insert Latency', () => queryAsync(
       QUERY_SQL,
       [process.env.NWCWORKFLOW_TABLE, workflows],
     ));
-    // Separating the new workflow to SQS
 
+    // Separating the new workflow to SQS
     let delayTimer = 0;
     let messages = [];
     while (workflows.length !== 0) {
-      let ids = '';
+      const ids = [];
       for (let i = 0; i < process.env.SQS_BATCH_NUM && workflows.length !== 0; i++) {
-        ids += `${workflows.shift()[0]},`;
+        const workflow = workflows.shift();
+        ids.push([workflow[13], workflow[0]]);
       }
       messages.push({
         Id: delayTimer.toString(),
         DelaySeconds: process.env.MESSAGE_DELAY_SECOND * delayTimer++,
-        MessageBody: ids,
+        MessageBody: JSON.stringify(ids),
+        MessageAttributes: { keys: { DataType: 'String', StringValue: JSON.stringify(keys) } },
       });
       if (messages.length === 10) {
         await sendMessage(messages);
