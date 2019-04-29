@@ -56,7 +56,7 @@ const fetchHealthScores = (workflowId, tenant, keys) => new Promise(async (resol
 const getQueryString = (results) => {
   let queries = '';
   results.forEach((result) => {
-    queries += format(SQL, [process.env.NWCWORKFLOW_TABLE, result.completed, result.failed, result.workflowId]);
+    queries += `${format(SQL, [process.env.NWCWORKFLOW_TABLE, result.completed, result.failed, result.workflowId])};`;
   });
   return queries;
 };

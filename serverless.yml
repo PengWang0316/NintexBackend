@@ -72,6 +72,8 @@ package:
     - __tests__/**
     - build*
     - Information.txt
+    - Database.sql
+    - README.md
 
 functions:
   # Did not follow the Rest rule to use a get request since the api could get
