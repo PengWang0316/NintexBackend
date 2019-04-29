@@ -11,7 +11,6 @@ const QUERY_SQL = 'SELECT id, completed, failed FROM ?? WHERE id IN (?)';
 
 const handler = async (event, context) => {
   const { ids } = JSON.parse(event.body);
-  log.debug(ids);
   try {
     const { rows } = await cloudwatch.trackExecTime(
       'MySQL SELECT latency',
