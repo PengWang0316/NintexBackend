@@ -147,3 +147,16 @@ functions:
       async_metrics: true
     layers:
       - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
+
+  update-department:
+    handler: functions/update-department.handler
+    events:
+      - http:
+          path: /department
+          method: put
+          cors: true
+    memorySize: 256
+    environment:
+      async_metrics: true
+    layers:
+      - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
