@@ -7,7 +7,7 @@ const { queryAsync } = require('@kevinwang0316/mysql-helper');
 const wrapper = require('../middlewares/wrapper');
 
 // Conditional insert
-const QUERY_SQL = 'SELECT id, completed, failed FROM ?? WHERE id IN (?)';
+const QUERY_SQL = 'SELECT id, completed, failed, department FROM ?? WHERE id IN (?)';
 
 const handler = async (event, context) => {
   const { ids } = JSON.parse(event.body);
