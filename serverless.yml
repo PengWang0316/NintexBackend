@@ -41,7 +41,6 @@ provider:
     FUNCTION_SHIELD_TOKEN: ${ssm:/nintex/${self:custom.stage}/function_shield_token} # For using the Function Shield
     NWCWORKFLOW_TABLE: NWCWorkflow
     OFFICEWORKFLOW_TABLE: OfficeWorkflow
-    FETCH_HEALTH_SCORE_Q: https://sqs.us-west-2.amazonaws.com/913532693294/Fetch_Health_Score	
   iamRoleStatements:
     - Effect: Allow
       Action: cloudwatch:PutMetricData
@@ -102,38 +101,49 @@ functions:
     memorySize: 256
     environment:
       async_metrics: true
-      SQS_BATCH_NUM: 10
+      WORKFLOW_BATCH_NUM: 10
       MESSAGE_DELAY_SECOND: 20
+      FETCH_HEALTH_SCORE_SF: arn:aws:states:#{AWS::Region}:#{AWS::AccountId}:stateMachine:Waitstate
     iamRoleStatements:
-      # Give the function permission to put message to SQS
+      # Give the function permission to start a step function
       - Effect: Allow
-        Action: sqs:SendMessage
-        Resource: arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:Fetch_Health_Score
+        Action: states:StartExecution
+        Resource: arn:aws:states:#{AWS::Region}:#{AWS::AccountId}:stateMachine:Waitstate
     layers:
       - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
 
+  # fetch-nwc-health-score:
+  #     handler: functions/fetch-nwc-health-score.handler
+  #     events:
+  #       - sqs: arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:Fetch_Health_Score
+  #     memorySize: 256
+  #     timeout: 40
+  #     environment:
+  #       async_metrics: true
+  #       NWC_LIST_WORKFLOWS_API: https://us.nintex.io/workflows/v1/designs
+  #     iamRoleStatements:
+  #       # Give the function permission to receive, getQueueAtrributes and delete message from SQS
+  #       - Effect: Allow
+  #         Action: sqs:ReceiveMessage
+  #         Resource: arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:Fetch_Health_Score
+  #       - Effect: Allow
+  #         Action: sqs:DeleteMessage
+  #         Resource: arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:Fetch_Health_Score
+  #       - Effect: Allow
+  #         Action: sqs:GetQueueAttributes
+  #         Resource: arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:Fetch_Health_Score
+  #     layers:
+  #       - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
+
   fetch-nwc-health-score:
-      handler: functions/fetch-nwc-health-score.handler
-      events:
-        - sqs: arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:Fetch_Health_Score
-      memorySize: 256
-      timeout: 40
-      environment:
-        async_metrics: true
-        NWC_LIST_WORKFLOWS_API: https://us.nintex.io/workflows/v1/designs
-      iamRoleStatements:
-        # Give the function permission to receive, getQueueAtrributes and delete message from SQS
-        - Effect: Allow
-          Action: sqs:ReceiveMessage
-          Resource: arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:Fetch_Health_Score
-        - Effect: Allow
-          Action: sqs:DeleteMessage
-          Resource: arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:Fetch_Health_Score
-        - Effect: Allow
-          Action: sqs:GetQueueAttributes
-          Resource: arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:Fetch_Health_Score
-      layers:
-        - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
+    handler: functions/fetch-nwc-health-score-sf.handler
+    memorySize: 256
+    timeout: 40
+    environment:
+      async_metrics: true
+      NWC_LIST_WORKFLOWS_API: https://us.nintex.io/workflows/v1/designs
+    layers:
+      - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
 
   add-office-workflows:
     handler: functions/add-office-workflows.handler
