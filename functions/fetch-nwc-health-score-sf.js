@@ -62,15 +62,12 @@ const getQueryString = (results) => {
 };
 
 const handler = async (event, context) => {
-  // workflowIds will be [[tenantName, id], ...]
-  const workflowIds = JSON.parse(event);console.log(workflowIds);
-  // keys will be { thenantNameA: keyA, ... }
-  // const keys = JSON.parse(event.Records[0].messageAttributes.keys.stringValue);
-  // const promiseCalls = workflowIds.map(workflow => fetchHealthScores(workflow[1], workflow[0], keys));
+  const { keys, ids } = event;
+  const promiseCalls = ids.map(workflow => fetchHealthScores(workflow[1], workflow[0], keys));
 
   try {
-    // const results = await Promise.all(promiseCalls);
-    // await trackExecTime('MySQL Batch Insert Latency', () => queryAsync(getQueryString(results)));
+    const results = await Promise.all(promiseCalls);
+    await trackExecTime('MySQL Batch Insert Latency', () => queryAsync(getQueryString(results)));
     return { statusCode: 200 };
   } catch (err) {
     log.error(`${context.functionName}: ${err}`);
