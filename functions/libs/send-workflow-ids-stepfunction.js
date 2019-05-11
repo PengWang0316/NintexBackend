@@ -1,5 +1,3 @@
-'use strict';
-
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-plusplus */
 const AWS = require('aws-sdk');
