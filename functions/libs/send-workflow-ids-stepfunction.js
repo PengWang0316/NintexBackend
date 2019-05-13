@@ -1,7 +1,7 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-plusplus */
 const AWS = require('aws-sdk');
-const log = require('@kevinwang0316/cloudwatch');
+const log = require('@kevinwang0316/log');
 
 AWS.config.update({ region: process.env.AWS_REGION });
 const stepFunctions = new AWS.StepFunctions();
