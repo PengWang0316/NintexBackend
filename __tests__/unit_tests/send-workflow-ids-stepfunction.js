@@ -91,4 +91,31 @@ describe('send-workflow-ids-stepfunction', () => {
     expect(mockPromise).toHaveBeenCalledTimes(2);
     expect(log.error).not.toHaveBeenCalled();
   });
+
+  test('sendWorkflowIds -> with StepFunction error', async () => {
+    const workflows = [
+      ['workflow 00', null, null, null, null, null, null, null, null, null, null, null, null, 'workflow 013'],
+      ['workflow 10', null, null, null, null, null, null, null, null, null, null, null, null, 'workflow 113'],
+    ];
+    const keys = { key1: 1, key2: 2 };
+    const error = new Error('error');
+
+    // mockPromise.mockImplementation(() => Promise.reject());
+    mockPromise.mockImplementationOnce(() => {
+      throw error;
+    });
+    // sendWorkflowIds = require('../../functions/libs/send-workflow-ids-stepfunction');
+
+    // expect(async () => sendWorkflowIds(workflows, keys)).toThrow();
+    try {
+      await sendWorkflowIds(workflows, keys);
+    } catch (err) {
+      expect(err).toEqual(err);
+    }
+
+
+    expect(mockStartExecution).toHaveBeenCalledTimes(1);
+    // expect(mockPromise).not.toHaveBeenCalled();
+    expect(log.error).toHaveBeenCalledTimes(1);
+  });
 });
