@@ -56,4 +56,39 @@ describe('send-workflow-ids-stepfunction', () => {
     expect(mockPromise).toHaveBeenCalledTimes(1);
     expect(log.error).not.toHaveBeenCalled();
   });
+
+  test('sendWorkflowIds -> workflows greater than bath size without error', async () => {
+    const workflows = [
+      ['workflow 00', null, null, null, null, null, null, null, null, null, null, null, null, 'workflow 013'],
+      ['workflow 10', null, null, null, null, null, null, null, null, null, null, null, null, 'workflow 113'],
+      ['workflow 20', null, null, null, null, null, null, null, null, null, null, null, null, 'workflow 213'],
+      ['workflow 30', null, null, null, null, null, null, null, null, null, null, null, null, 'workflow 313'],
+    ];
+    const extraWorkflows = [...workflows];
+    const keys = {
+      key1: 1, key2: 2, key3: 3, key4: 4,
+    };
+
+    await sendWorkflowIds(workflows, keys);
+
+    expect(mockStartExecution).toHaveBeenCalledTimes(2);
+    expect(mockStartExecution).toHaveBeenNthCalledWith(1, {
+      stateMachineArn: process.env.FETCH_HEALTH_SCORE_SF,
+      input: JSON.stringify({
+        keys,
+        ids: [[extraWorkflows[0][13], extraWorkflows[0][0]], [extraWorkflows[1][13], extraWorkflows[1][0]], [extraWorkflows[2][13], extraWorkflows[2][0]]],
+        waitTime: process.env.MESSAGE_DELAY_SECOND * 0,
+      }),
+    });
+    expect(mockStartExecution).toHaveBeenNthCalledWith(2, {
+      stateMachineArn: process.env.FETCH_HEALTH_SCORE_SF,
+      input: JSON.stringify({
+        keys,
+        ids: [[extraWorkflows[3][13], extraWorkflows[3][0]]],
+        waitTime: process.env.MESSAGE_DELAY_SECOND * 1,
+      }),
+    });
+    expect(mockPromise).toHaveBeenCalledTimes(2);
+    expect(log.error).not.toHaveBeenCalled();
+  });
 });
