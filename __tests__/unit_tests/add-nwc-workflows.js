@@ -33,4 +33,17 @@ describe('add-nwc-workflows', () => {
     expect(error).not.toHaveBeenCalled();
     expect(result).toEqual({ statusCode: 200 });
   });
+
+  test('run handler -> with error', async () => {
+    const event = { body: JSON.stringify({ workflows: 'workflows', keys: 'keys' }) };
+    const context = { functionName: 'functionName' };
+
+    trackExecTime.mockRejectedValueOnce('error');
+
+    const result = await handler(event, context);
+
+    expect(error).toHaveBeenCalledTimes(1);
+    expect(error).toHaveBeenLastCalledWith(`${context.functionName}: error`);
+    expect(result).toEqual({ statusCode: 500 });
+  });
 });
