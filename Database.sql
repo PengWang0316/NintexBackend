@@ -33,3 +33,80 @@ CREATE TABLE OfficeWorkflow (
   tenantUrl VARCHAR(255),
   timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+/* Version 2 schema */
+
+CREATE TABLE Workflows (
+  id VARCHAR(255) NOT NULL PRIMARY KEY,
+  lhProductType VARCHAR(500),
+  lhDataSource VARCHAR(500),
+  lhSiteList VARCHAR(500),
+  workflowVersion VARCHAR(500),
+  authorDisplayName VARCHAR(500),
+  authorEmail VARCHAR(500),
+  tenantId VARCHAR(500),
+  environmentId VARCHAR(500),
+  locationId VARCHAR(500),
+  locationName VARCHAR(500),
+  locationPath VARCHAR(500),
+  locationUrl VARCHAR(500),
+  assignedUse VARCHAR(500),
+  email VARCHAR(500),
+  location1 VARCHAR(500),
+  location2 VARCHAR(500),
+  location3 VARCHAR(500),
+  sliceDate TIMESTAMP,
+  workflowType VARCHAR(500),
+  workflowName VARCHAR(500),
+  publishDate TIMESTAMP,
+  url VARCHAR(500),
+  publisher VARCHAR(500),
+  home VARCHAR(500),
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE Instances (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  statusDate TIMESTAMP,
+  status VARCHAR(500),
+  instanceCount INT UNSIGNED,
+  workflowName VARCHAR(500),
+  location1 VARCHAR(500),
+  assignedUse VARCHAR(500),
+  dataSource VARCHAR(500),
+  siteList VARCHAR(500),
+  workflowId VARCHAR(500),
+  environmentId VARCHAR(500),
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE Actions (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  workflowName VARCHAR(500),
+  home VARCHAR(500),
+  actions VARCHAR(500),
+  url VARCHAR(500),
+  actionPath VARCHAR(500),
+  actionUse VARCHAR(500),
+  lastPublished TIMESTAMP,
+  email VARCHAR(500),
+  publisher VARCHAR(500),
+  workflowId VARCHAR(500),
+  workflowVersion VARCHAR(500),
+  actionLable VARCHAR(500),
+  actionType VARCHAR(500),
+  locationId VARCHAR(500),
+  locationUrl VARCHAR(500),
+  locationName VARCHAR(500),
+  authorEmail VARCHAR(500),
+  tenantId VARCHAR(500),
+  category VARCHAR(500),
+  activityName VARCHAR(500),
+  environmentId VARCHAR(500),
+  location1 VARCHAR(500),
+  location2 VARCHAR(500),
+  location3 VARCHAR(500),
+  actionName VARCHAR(500),
+  actionCategory VARCHAR(500),
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
