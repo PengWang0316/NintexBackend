@@ -41,6 +41,9 @@ provider:
     FUNCTION_SHIELD_TOKEN: ${ssm:/nintex/${self:custom.stage}/function_shield_token} # For using the Function Shield
     NWCWORKFLOW_TABLE: NWCWorkflow
     OFFICEWORKFLOW_TABLE: OfficeWorkflow
+    WORKFLOWS_TABLE: Workflows
+    ACTIONS_TABLE: Actions
+    INSTANCES_TABLE: Instances
   iamRoleStatements:
     - Effect: Allow
       Action: cloudwatch:PutMetricData
