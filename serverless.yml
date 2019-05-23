@@ -76,6 +76,7 @@ package:
     - Information.txt
     - Database.sql
     - README.md
+    - powershell/**
 
 functions:
   # Did not follow the Rest rule to use a get request since the api could get
@@ -168,6 +169,24 @@ functions:
           path: /department
           method: put
           cors: true
+    memorySize: 256
+    environment:
+      async_metrics: true
+    layers:
+      - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
+
+  # Start functions for version 2
+  add-workflows:
+    handler: functions/add-workflows.handler
+    events:
+      - http:
+          path: /workflow
+          method: post
+          cors:
+            origin: '*'
+            allowCredentials: false
+          authorizer:
+            arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/${ssm:/nintex/${self:custom.stage}/cognito_user_pool_id}
     memorySize: 256
     environment:
       async_metrics: true
