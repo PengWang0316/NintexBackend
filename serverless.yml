@@ -182,12 +182,11 @@ functions:
       - http:
           path: /workflow
           method: post
-          cors:
-            origin: '*'
-            allowCredentials: false
+          cors: true
           authorizer:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/${ssm:/nintex/${self:custom.stage}/cognito_user_pool_id}
     memorySize: 256
+    timeout: 20
     environment:
       async_metrics: true
     layers:
