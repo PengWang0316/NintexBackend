@@ -54,14 +54,15 @@ CREATE TABLE Workflows (
   email VARCHAR(500),
   location1 VARCHAR(500),
   location2 VARCHAR(500),
-  location3 VARCHAR(500),
   sliceDate TIMESTAMP,
+  location3 VARCHAR(500),
   workflowType VARCHAR(500),
   workflowName VARCHAR(500),
   publishDate TIMESTAMP,
   url VARCHAR(500),
   publisher VARCHAR(500),
   home VARCHAR(500),
+  userId varchar(500) NOT NULL,
   timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -77,6 +78,7 @@ CREATE TABLE Instances (
   siteList VARCHAR(500),
   workflowId VARCHAR(500),
   environmentId VARCHAR(500),
+  userId varchar(500) NOT NULL,
   timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -108,5 +110,6 @@ CREATE TABLE Actions (
   location3 VARCHAR(500),
   actionName VARCHAR(500),
   actionCategory VARCHAR(500),
+  userId varchar(500) NOT NULL,
   timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
