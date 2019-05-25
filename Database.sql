@@ -95,7 +95,7 @@ CREATE TABLE Actions (
   publisher VARCHAR(500),
   workflowId VARCHAR(500),
   workflowVersion VARCHAR(500),
-  actionLable VARCHAR(500),
+  actionLabel VARCHAR(500),
   actionType VARCHAR(500),
   locationId VARCHAR(500),
   locationUrl VARCHAR(500),
