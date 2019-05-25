@@ -191,3 +191,35 @@ functions:
       async_metrics: true
     layers:
       - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
+
+  add-instances:
+    handler: functions/add-instances.handler
+    events:
+      - http:
+          path: /instance
+          method: post
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/${ssm:/nintex/${self:custom.stage}/cognito_user_pool_id}
+    memorySize: 256
+    timeout: 20
+    environment:
+      async_metrics: true
+    layers:
+      - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
+
+  add-actions:
+    handler: functions/add-actions.handler
+    events:
+      - http:
+          path: /action
+          method: post
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/${ssm:/nintex/${self:custom.stage}/cognito_user_pool_id}
+    memorySize: 256
+    timeout: 20
+    environment:
+      async_metrics: true
+    layers:
+      - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
