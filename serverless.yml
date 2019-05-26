@@ -224,8 +224,8 @@ functions:
     layers:
       - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
 
-  fetch-workflows-count:
-    handler: functions/fetch-workflows-count.handler
+  fetch-workflow-count:
+    handler: functions/fetch-workflow-count.handler
     events:
       - http:
           path: /workflow/count

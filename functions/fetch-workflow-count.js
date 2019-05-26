@@ -4,7 +4,7 @@ const { queryAsync } = require('@kevinwang0316/mysql-helper');
 
 const wrapper = require('../middlewares/wrapper');
 
-const INSERT_SQL = 'SELECT COUNT(*) FROM Workflows WHERE userId = ?';
+const INSERT_SQL = 'SELECT COUNT(*) count FROM ?? WHERE userId = ?';
 
 const handler = async (event, context) => {
   const { requestContext: { authorizer: { claims: { sub } } } } = event;
