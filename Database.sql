@@ -130,7 +130,16 @@ SELECT SUM(IF(status = 'Completed', instanceCount, NULL)) completed,
        SUM(IF(status = 'Running', instanceCount, NULL)) running,
        SUM(IF(status = 'Terminated', instanceCount, NULL)) terminatedInstance,
        SUM(IF(status = 'Cancelled', instanceCount, NULL)) cancelled FROM Instances WHERE userId = '';
-SELECT statusDate, COUNT(IF(status = 'Completed', 1, NULL)) completed, COUNT(IF(status = 'Failed', 1, NULL)) failed, COUNT(IF(status = 'Started', 1, NULL)) started FROM Instances WHERE userId = '' GROUP BY statusDate;
+
+-- SELECT statusDate, COUNT(IF(status = 'Completed', 1, NULL)) completed, COUNT(IF(status = 'Failed', 1, NULL)) failed, COUNT(IF(status = 'Started', 1, NULL)) started FROM Instances WHERE userId = '' GROUP BY statusDate;
+SELECT statusDate,
+       SUM(IF(status = 'Completed', instanceCount, NULL)) completed,
+       SUM(IF(status = 'Failed', instanceCount, NULL)) failed,
+       SUM(IF(status = 'Started', instanceCount, NULL)) started,
+       SUM(IF(status = 'Faulting', instanceCount, NULL)) faulting,
+       SUM(IF(status = 'Running', instanceCount, NULL)) running,
+       SUM(IF(status = 'Terminated', instanceCount, NULL)) terminatedInstance,
+       SUM(IF(status = 'Cancelled', instanceCount, NULL)) cancelled FROM Instances WHERE userId = '' GROUP BY statusDate;
 SELECT locationName, COUNT(locationName) loctionCount FROM Workflows WHERE userId = '' GROUP BY locationName;
 SELECT publisher, COUNT(publisher) publisherCount FROM Actions WHERE userId = '' GROUP BY publisher ORDER BY publisherCount DESC LIMIT 10;
 SELECT actionUse, COUNT(actionUse) useCount FROM Actions WHERE userId = '' GROUP BY actionUse ORDER BY useCount DESC;
