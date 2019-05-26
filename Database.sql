@@ -47,7 +47,7 @@ CREATE TABLE Workflows (
   tenantId VARCHAR(500),
   environmentId VARCHAR(500),
   locationId VARCHAR(500),
-  locationName VARCHAR(500),
+  locationName VARCHAR(100),
   locationPath VARCHAR(500),
   locationUrl VARCHAR(500),
   assignedUse VARCHAR(500),
@@ -62,14 +62,15 @@ CREATE TABLE Workflows (
   url VARCHAR(500),
   publisher VARCHAR(500),
   home VARCHAR(500),
-  userId varchar(500) NOT NULL,
+  userId varchar(36) NOT NULL,
   timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+CREATE INDEX userid_locationname ON Workflows(userId, locationName);
 
 CREATE TABLE Instances (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   statusDate TIMESTAMP,
-  status VARCHAR(500),
+  status VARCHAR(20),
   instanceCount INT UNSIGNED,
   workflowName VARCHAR(500),
   location1 VARCHAR(500),
@@ -78,9 +79,10 @@ CREATE TABLE Instances (
   siteList VARCHAR(500),
   workflowId VARCHAR(500),
   environmentId VARCHAR(500),
-  userId varchar(500) NOT NULL,
+  userId varchar(36) NOT NULL,
   timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+CREATE INDEX userid_statusdate ON Instances(userId, statusDate, status);
 
 CREATE TABLE Actions (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -89,10 +91,10 @@ CREATE TABLE Actions (
   actions VARCHAR(500),
   url VARCHAR(500),
   actionPath VARCHAR(500),
-  actionUse VARCHAR(500),
+  actionUse VARCHAR(50),
   lastPublished TIMESTAMP,
   email VARCHAR(500),
-  publisher VARCHAR(500),
+  publisher VARCHAR(50),
   workflowId VARCHAR(500),
   workflowVersion VARCHAR(500),
   actionLabel VARCHAR(500),
@@ -108,8 +110,9 @@ CREATE TABLE Actions (
   location1 VARCHAR(500),
   location2 VARCHAR(500),
   location3 VARCHAR(500),
-  actionName VARCHAR(500),
+  actionName VARCHAR(100),
   actionCategory VARCHAR(500),
-  userId varchar(500) NOT NULL,
+  userId varchar(36) NOT NULL,
   timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+CREATE INDEX userid_publisher_action ON Actions(userId, publisher, actionUse, actionName);
