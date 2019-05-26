@@ -83,6 +83,7 @@ CREATE TABLE Instances (
   timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX userid_statusdate ON Instances(userId, statusDate, status);
+CREATE INDEX userid_statusCount ON Instances(userId, status, instanceCount);
 
 CREATE TABLE Actions (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
