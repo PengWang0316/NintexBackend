@@ -116,3 +116,14 @@ CREATE TABLE Actions (
   timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX userid_publisher_action ON Actions(userId, publisher, actionUse, actionName);
+
+/* Some query SQLs for the dashboard */
+SELECT COUNT(*) FROM Workflows WHERE userId = 'af835b84-b9bb-48ec-9b79-218500f42315';
+SELECT SUM(instanceCount) FROM Instances WHERE userId = 'af835b84-b9bb-48ec-9b79-218500f42315';
+SELECT COUNT(DISTINCT publisher) FROM Actions WHERE userId = 'af835b84-b9bb-48ec-9b79-218500f42315';
+SELECT COUNT(IF(status = 'Completed', 1, NULL)) completed, COUNT(IF(status = 'Failed', 1, NULL)) failed, COUNT(IF(status = 'Started', 1, NULL)) started FROM Instances WHERE userId = 'af835b84-b9bb-48ec-9b79-218500f42315';
+SELECT statusDate, COUNT(IF(status = 'Completed', 1, NULL)) completed, COUNT(IF(status = 'Failed', 1, NULL)) failed, COUNT(IF(status = 'Started', 1, NULL)) started FROM Instances WHERE userId = 'af835b84-b9bb-48ec-9b79-218500f42315' GROUP BY statusDate;
+SELECT locationName, COUNT(locationName) loctionCount FROM Workflows WHERE userId = 'af835b84-b9bb-48ec-9b79-218500f42315' GROUP BY locationName;
+SELECT publisher, COUNT(publisher) publisherCount FROM Actions WHERE userId = 'af835b84-b9bb-48ec-9b79-218500f42315' GROUP BY publisher ORDER BY publisherCount DESC LIMIT 10;
+SELECT actionUse, COUNT(actionUse) useCount FROM Actions WHERE userId = 'af835b84-b9bb-48ec-9b79-218500f42315' GROUP BY actionUse ORDER BY useCount DESC;
+SELECT actionName, COUNT(actionName) nameCount FROM Actions WHERE userId = 'af835b84-b9bb-48ec-9b79-218500f42315' GROUP BY actionName;
