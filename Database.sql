@@ -120,7 +120,7 @@ CREATE INDEX userid_publisher_action ON Actions(userId, publisher, actionUse, ac
 /* Some query SQLs for the dashboard */
 SELECT COUNT(*) count FROM Workflows WHERE userId = '';
 SELECT SUM(instanceCount) count FROM Instances WHERE userId = '';
-SELECT COUNT(DISTINCT publisher) FROM Actions WHERE userId = '';
+SELECT COUNT(DISTINCT publisher) count FROM Actions WHERE userId = '';
 SELECT COUNT(IF(status = 'Completed', 1, NULL)) completed, COUNT(IF(status = 'Failed', 1, NULL)) failed, COUNT(IF(status = 'Started', 1, NULL)) started FROM Instances WHERE userId = '';
 SELECT statusDate, COUNT(IF(status = 'Completed', 1, NULL)) completed, COUNT(IF(status = 'Failed', 1, NULL)) failed, COUNT(IF(status = 'Started', 1, NULL)) started FROM Instances WHERE userId = '' GROUP BY statusDate;
 SELECT locationName, COUNT(locationName) loctionCount FROM Workflows WHERE userId = '' GROUP BY locationName;
