@@ -17,7 +17,7 @@ const handler = async (event, context) => {
   const { requestContext: { authorizer: { claims: { sub } } } } = event;
   try {
     const { rows } = await trackExecTime('MySQL Batch Insert Latency', () => queryAsync(QUERY_SQL, [process.env.INSTANCES_TABLE, sub]));
-    return { statusCode: 200, body: JSON.stringify(rows[0]) };
+    return { statusCode: 200, body: JSON.stringify(rows) };
   } catch (err) {
     log.error(`${context.functionName}: ${err}`);
     return { statusCode: 500 };
