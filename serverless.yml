@@ -314,11 +314,11 @@ functions:
     layers:
       - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
 
-  fetch-top-publishers:
-    handler: functions/fetch-top-publishers.handler
+  fetch-top-publishers-count:
+    handler: functions/fetch-top-publishers-count.handler
     events:
       - http:
-          path: /action/topPublishers
+          path: /action/topPublishers/count
           method: get
           cors: true
           authorizer:

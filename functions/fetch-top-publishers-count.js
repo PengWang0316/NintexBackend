@@ -5,7 +5,7 @@ const { queryAsync } = require('@kevinwang0316/mysql-helper');
 const wrapper = require('../middlewares/wrapper');
 
 const QUERY_SQL = `SELECT publisher, COUNT(publisher) publisherCount FROM ?? WHERE userId = ?
-                   GROUP BY publisher ORDER BY publisherCount DESC LIMIT 10`;
+                   GROUP BY publisher ORDER BY publisherCount DESC LIMIT 5`;
 
 const handler = async (event, context) => {
   const { requestContext: { authorizer: { claims: { sub } } } } = event;
