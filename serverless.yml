@@ -328,4 +328,19 @@ functions:
       async_metrics: true
     layers:
       - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
+
+  fetch-action-use:
+    handler: functions/fetch-action-use.handler
+    events:
+      - http:
+          path: /action/use
+          method: get
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/${ssm:/nintex/${self:custom.stage}/cognito_user_pool_id}
+    memorySize: 256
+    environment:
+      async_metrics: true
+    layers:
+      - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
       

@@ -143,5 +143,5 @@ SELECT statusDate,
        
 SELECT locationName, COUNT(locationName) locationCount FROM Workflows WHERE userId = '' GROUP BY locationName ORDER BY locationCount DESC LIMIT 10;
 SELECT publisher, COUNT(publisher) publisherCount FROM Actions WHERE userId = '' GROUP BY publisher ORDER BY publisherCount DESC LIMIT 10;
-SELECT actionUse, COUNT(actionUse) useCount FROM Actions WHERE userId = '' GROUP BY actionUse ORDER BY useCount DESC;
+SELECT actionUse, COUNT(actionUse) useCount FROM Actions WHERE userId = '' GROUP BY actionUse;
 SELECT actionName, COUNT(actionName) nameCount FROM Actions WHERE userId = '' GROUP BY actionName;
