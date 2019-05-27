@@ -4,7 +4,7 @@ const { queryAsync } = require('@kevinwang0316/mysql-helper');
 
 const wrapper = require('../middlewares/wrapper');
 
-const QUERY_SQL = 'SELECT actionName, COUNT(actionName) nameCount FROM ?? WHERE userId = ? GROUP BY actionName';
+const QUERY_SQL = 'SELECT actionName as text, COUNT(actionName) value FROM ?? WHERE userId = ? GROUP BY actionName';
 
 const handler = async (event, context) => {
   const { requestContext: { authorizer: { claims: { sub } } } } = event;
