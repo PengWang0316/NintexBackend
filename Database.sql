@@ -140,7 +140,8 @@ SELECT statusDate,
        SUM(IF(status = 'Running', instanceCount, 0)) running,
        SUM(IF(status = 'Terminated', instanceCount, 0)) terminatedInstance,
        SUM(IF(status = 'Cancelled', instanceCount, 0)) cancelled FROM Instances WHERE userId = '' GROUP BY statusDate;
-SELECT locationName, COUNT(locationName) loctionCount FROM Workflows WHERE userId = '' GROUP BY locationName;
+       
+SELECT locationName, COUNT(locationName) locationCount FROM Workflows WHERE userId = '' GROUP BY locationName ORDER BY locationCount DESC LIMIT 10;
 SELECT publisher, COUNT(publisher) publisherCount FROM Actions WHERE userId = '' GROUP BY publisher ORDER BY publisherCount DESC LIMIT 10;
 SELECT actionUse, COUNT(actionUse) useCount FROM Actions WHERE userId = '' GROUP BY actionUse ORDER BY useCount DESC;
 SELECT actionName, COUNT(actionName) nameCount FROM Actions WHERE userId = '' GROUP BY actionName;
