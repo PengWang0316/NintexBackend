@@ -62,6 +62,7 @@ CREATE TABLE Workflows (
   url VARCHAR(500),
   publisher VARCHAR(500),
   home VARCHAR(500),
+  tags VARCHAR(500),
   userId varchar(36) NOT NULL,
   timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -117,6 +118,14 @@ CREATE TABLE Actions (
   timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX userid_publisher_action ON Actions(userId, publisher, actionUse, actionName);
+
+CREATE TABLE Tags (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  content VARCHAR(100),
+  userId VARCHAR(36) NOT NULL,
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX tag_userid ON Tags(userId);
 
 /* Some query SQLs for the dashboard */
 SELECT COUNT(*) count FROM Workflows WHERE userId = '';
