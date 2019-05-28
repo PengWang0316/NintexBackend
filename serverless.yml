@@ -329,11 +329,11 @@ functions:
     layers:
       - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
 
-  fetch-action-use:
-    handler: functions/fetch-action-use.handler
+  fetch-action-use-count:
+    handler: functions/fetch-action-use-count.handler
     events:
       - http:
-          path: /action/use
+          path: /action/use/count
           method: get
           cors: true
           authorizer:
