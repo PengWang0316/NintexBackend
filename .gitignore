@@ -8,3 +8,4 @@ Information.txt
 .DS_Store
 coverage
 .coveralls.yml
+Database.sql
