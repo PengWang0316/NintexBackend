@@ -4,7 +4,7 @@ const { queryAsync } = require('@kevinwang0316/mysql-helper');
 
 const wrapper = require('../middlewares/wrapper');
 
-const QUERY_SQL = 'SELECT id, content, color FROM Tags WHERE userId = ?';
+const QUERY_SQL = 'SELECT id, content, color FROM ?? WHERE userId = ?';
 
 const handler = async (event, context) => {
   const { requestContext: { authorizer: { claims: { sub } } } } = event;
