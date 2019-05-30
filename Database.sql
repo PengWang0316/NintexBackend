@@ -37,7 +37,7 @@ CREATE TABLE OfficeWorkflow (
 /* Version 2 schema */
 
 CREATE TABLE Workflows (
-  id VARCHAR(255) NOT NULL PRIMARY KEY,
+  id VARCHAR(36) NOT NULL PRIMARY KEY,
   lhProductType VARCHAR(500),
   lhDataSource VARCHAR(500),
   lhSiteList VARCHAR(500),
@@ -48,7 +48,7 @@ CREATE TABLE Workflows (
   environmentId VARCHAR(500),
   locationId VARCHAR(500),
   locationName VARCHAR(100),
-  locationPath VARCHAR(500),
+  locationPath VARCHAR(150),
   locationUrl VARCHAR(500),
   assignedUse VARCHAR(500),
   email VARCHAR(500),
@@ -57,16 +57,17 @@ CREATE TABLE Workflows (
   sliceDate TIMESTAMP,
   location3 VARCHAR(500),
   workflowType VARCHAR(500),
-  workflowName VARCHAR(500),
+  workflowName VARCHAR(150),
   publishDate TIMESTAMP,
   url VARCHAR(500),
-  publisher VARCHAR(500),
+  publisher VARCHAR(100),
   home VARCHAR(500),
-  tags VARCHAR(500),
+  tags VARCHAR(100),
   userId varchar(36) NOT NULL,
   timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX userid_locationname ON Workflows(userId, locationName);
+CREATE INDEX workflow_fetching_table_index ON Workflows(userId, id, workflowName, locationName, publishDate, publisher, locationPath, tags);
 
 CREATE TABLE Instances (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -149,8 +150,12 @@ SELECT statusDate,
        SUM(IF(status = 'Running', instanceCount, 0)) running,
        SUM(IF(status = 'Terminated', instanceCount, 0)) terminatedInstance,
        SUM(IF(status = 'Cancelled', instanceCount, 0)) cancelled FROM Instances WHERE userId = '' GROUP BY statusDate;
-       
+
+/* Below statement Using temporary; Using filesort. Need optimize*/
 SELECT locationName, COUNT(locationName) locationCount FROM Workflows WHERE userId = '' GROUP BY locationName ORDER BY locationCount DESC LIMIT 10;
 SELECT publisher, COUNT(publisher) publisherCount FROM Actions WHERE userId = '' GROUP BY publisher ORDER BY publisherCount DESC LIMIT 10;
 SELECT actionUse, COUNT(actionUse) useCount FROM Actions WHERE userId = '' GROUP BY actionUse;
 SELECT actionName as text, COUNT(actionName) value FROM Actions WHERE userId = '' GROUP BY actionName;
+
+/* Fetching data for the table */
+SELECT id as workflowId, workflowName, publishDate, publisher, locationPath, tags FROM Workflows Where userId='';
