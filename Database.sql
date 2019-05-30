@@ -122,11 +122,12 @@ CREATE INDEX userid_publisher_action ON Actions(userId, publisher, actionUse, ac
 
 CREATE TABLE Tags (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  content VARCHAR(100),
+  content VARCHAR(100) NOT NULL,
+  color CHAR(6) NOT NULL,
   userId VARCHAR(36) NOT NULL,
-  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-CREATE INDEX tag_userid ON Tags(userId);
+CREATE INDEX tag_userid ON Tags(userId, content, color);
 
 /* Some query SQLs for the dashboard */
 SELECT COUNT(*) count FROM Workflows WHERE userId = '';
@@ -159,3 +160,6 @@ SELECT actionName as text, COUNT(actionName) value FROM Actions WHERE userId = '
 
 /* Fetching data for the table */
 SELECT id as workflowId, workflowName, publishDate, publisher, locationPath, tags FROM Workflows Where userId='';
+
+/* Fetching tags data */
+SELECT id, content, color FROM Tags WHERE userId = '';
