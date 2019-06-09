@@ -19,7 +19,7 @@ const handler = async (event, context) => {
     ]);
     return {
       statusCode: 200,
-      body: JSON.stringify([...data[0].rows, ...data[1].rows, ...data[2].rows]),
+      body: JSON.stringify([...data[0].rows, ...data[1].rows]),
     };
   } catch (err) {
     log.error(`${context.functionName}: ${err}`);
