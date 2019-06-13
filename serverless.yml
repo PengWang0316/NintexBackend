@@ -452,3 +452,19 @@ functions:
       async_metrics: true
     layers:
       - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
+
+  delete-nwckey:
+    handler: functions/delete-nwckey.handler
+    events:
+      - http:
+          path: /nwckey
+          method: delete
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/${ssm:/nintex/${self:custom.stage}/cognito_user_pool_id}
+    memorySize: 256
+    environment:
+      async_metrics: true
+    layers:
+      - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
+      
