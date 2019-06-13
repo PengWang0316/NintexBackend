@@ -45,6 +45,8 @@ provider:
     ACTIONS_TABLE: Actions
     TAGS_TABLE: Tags
     INSTANCES_TABLE: Instances
+    NWCKEYS_TABLE: NWCKeys
+    OFFICEKEYS_TABLE: OfficeKeys
   iamRoleStatements:
     - Effect: Allow
       Action: cloudwatch:PutMetricData
@@ -421,3 +423,17 @@ functions:
     layers:
       - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
       
+  fetch-nwckeys:
+    handler: functions/fetch-nwckeys.handler
+    events:
+      - http:
+          path: /nwckey
+          method: get
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/${ssm:/nintex/${self:custom.stage}/cognito_user_pool_id}
+    memorySize: 256
+    environment:
+      async_metrics: true
+    layers:
+      - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
