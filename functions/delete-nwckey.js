@@ -8,7 +8,7 @@ const DELETE_SQL = 'DELETE FROM ?? WHERE id = ? AND userId = ?';
 
 const handler = async (event, context) => {
   const { requestContext: { authorizer: { claims: { sub } } } } = event;
-  const { id } = event.queryStringParamters;
+  const { id } = event.queryStringParameters;
   try {
     await trackExecTime('MySQL DELETE Latency', () => queryAsync(DELETE_SQL, [process.env.NWCKEYS_TABLE, id, sub]));
     return { statusCode: 200 };
