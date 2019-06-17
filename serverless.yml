@@ -7,6 +7,7 @@ plugins:
   - serverless-plugin-canary-deployments
   - serverless-plugin-aws-alerts # Automatically generate alerts (Could be used for stopping and rolling back a canary deployment)
   - serverless-prune-plugin
+  - serverless-plugin-split-stacks # Split the resources to different CloudFormation to get ride of the 200 resources limitation
 
 custom: # stage and logLevel for log function
   stage: ${opt:stage, self:provider.stage} # use stage or get if from the provider.stage. The second paramter is default
@@ -18,6 +19,9 @@ custom: # stage and logLevel for log function
   prune:
     automatic: true
     number: 10
+  splitStacks:
+    perFunction: false
+    perType: true
   # Use the serverless-plugin-aws-alerts to generate alarms in order to tragge a roll back for a canary deployment
   # alerts:
   #   stages:
@@ -48,7 +52,7 @@ provider:
     INSTANCES_TABLE: Instances
     NWCKEYS_TABLE: NWCKeys
     OFFICEKEYS_TABLE: OfficeKeys
-    NWC_EXPORT_URL: https://us.nintex.io/workflows/v1/designs/
+    NWC_BASE_URL: https://us.nintex.io/workflows/v1/designs/
     NWC_IMPORT_URL: https://us.nintex.io/workflows/v1/designs/import
   iamRoleStatements:
     - Effect: Allow
@@ -546,8 +550,8 @@ functions:
     layers:
       - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
 
-  add-nwc-workflow-expkeys:
-    handler: functions/add-nwc-workflow-expkeys.handler
+  add-nwc-workflows-expkeys:
+    handler: functions/add-nwc-workflows-expkeys.handler
     events:
       - http:
           path: /nwcworkflows/exportedkeys
@@ -556,6 +560,7 @@ functions:
           authorizer:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/${ssm:/nintex/${self:custom.stage}/cognito_user_pool_id}
     memorySize: 256
+    timeout: 180
     environment:
       async_metrics: true
     layers:
