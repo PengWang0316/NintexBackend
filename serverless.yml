@@ -39,6 +39,7 @@ provider:
     log_level: ${self:custom.logLevel.${self:custom.stage}, self:custom.logLevel.default} # The variable for the log function
     STAGE: ${self:custom.stage} # For DEFAULT_CONTEXT in log.js
     FUNCTION_SHIELD_TOKEN: ${ssm:/nintex/${self:custom.stage}/function_shield_token} # For using the Function Shield
+    NWC_AUTO_FETCH_IMPORT_KEY: ${ssm:/nintex/${self:custom.stage}/nwc_auto_fetch-import_key} # For using the Function Shield
     NWCWORKFLOW_TABLE: NWCWorkflow
     OFFICEWORKFLOW_TABLE: OfficeWorkflow
     WORKFLOWS_TABLE: Workflows
@@ -47,6 +48,8 @@ provider:
     INSTANCES_TABLE: Instances
     NWCKEYS_TABLE: NWCKeys
     OFFICEKEYS_TABLE: OfficeKeys
+    NWC_EXPORT_URL: https://us.nintex.io/workflows/v1/designs/
+    NWC_IMPORT_URL: https://us.nintex.io/workflows/v1/designs/import
   iamRoleStatements:
     - Effect: Allow
       Action: cloudwatch:PutMetricData
@@ -534,6 +537,21 @@ functions:
       - http:
           path: /nwcworkflow/active
           method: put
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/${ssm:/nintex/${self:custom.stage}/cognito_user_pool_id}
+    memorySize: 256
+    environment:
+      async_metrics: true
+    layers:
+      - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
+
+  add-nwc-workflow-expkeys:
+    handler: functions/add-nwc-workflow-expkeys.handler
+    events:
+      - http:
+          path: /nwcworkflows/exportedkeys
+          method: post
           cors: true
           authorizer:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/${ssm:/nintex/${self:custom.stage}/cognito_user_pool_id}
