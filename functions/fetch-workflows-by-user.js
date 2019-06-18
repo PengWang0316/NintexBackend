@@ -5,7 +5,7 @@ const { queryAsync } = require('@kevinwang0316/mysql-helper');
 const wrapper = require('../middlewares/wrapper');
 
 const QUERY_WORKFLOWS_SQL = 'SELECT id as workflowId, workflowName, publishDate, publisher, locationPath, tags FROM ?? Where userId=?';
-const QUERY_NWCWORKFLOW_SQL = 'SELECT id as workflowId, name as workflowName, created as publishDate, authorName as publisher, tags, isActive, tenantUrl as tenant FROM ?? WHERE userId=?';
+const QUERY_NWCWORKFLOW_SQL = 'SELECT id as workflowId, name as workflowName, created as publishDate, authorName as publisher, tags, isActive, tenantUrl as tenant, isMonitored FROM ?? WHERE userId=?';
 // const QUERY_OFFIC_WORKFLOW_SQL = 'SELECT id as workflowId, name as workflowName, tags, tenantUrl as tenant FROM ?? WHERE userId=?';
 
 const handler = async (event, context) => {
