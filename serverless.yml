@@ -126,29 +126,6 @@ functions:
     layers:
       - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
 
-  # fetch-nwc-health-score:
-  #     handler: functions/fetch-nwc-health-score.handler
-  #     events:
-  #       - sqs: arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:Fetch_Health_Score
-  #     memorySize: 256
-  #     timeout: 40
-  #     environment:
-  #       async_metrics: true
-  #       NWC_LIST_WORKFLOWS_API: https://us.nintex.io/workflows/v1/designs
-  #     iamRoleStatements:
-  #       # Give the function permission to receive, getQueueAtrributes and delete message from SQS
-  #       - Effect: Allow
-  #         Action: sqs:ReceiveMessage
-  #         Resource: arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:Fetch_Health_Score
-  #       - Effect: Allow
-  #         Action: sqs:DeleteMessage
-  #         Resource: arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:Fetch_Health_Score
-  #       - Effect: Allow
-  #         Action: sqs:GetQueueAttributes
-  #         Resource: arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:Fetch_Health_Score
-  #     layers:
-  #       - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
-
   fetch-nwc-health-score:
     handler: functions/fetch-nwc-health-score-sf.handler
     memorySize: 256
@@ -530,6 +507,24 @@ functions:
           authorizer:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/${ssm:/nintex/${self:custom.stage}/cognito_user_pool_id}
     memorySize: 256
+    timeout: 180
+    environment:
+      async_metrics: true
+      EXPORT_IMPORT_SF: arn:aws:states:#{AWS::Region}:#{AWS::AccountId}:stateMachine:NWC_ExportDeactiveImportAddToDatabase
+      DELAY_SECOND: 20
+      LIMIT_BATCH_NUMBER: 10
+      BATCH_NUMBER: 10
+    iamRoleStatements:
+      - Effect: Allow
+        Action: states:StartExecution
+        Resource: arn:aws:states:#{AWS::Region}:#{AWS::AccountId}:stateMachine:NWC_ExportDeactiveImportAddToDatabase
+    layers:
+      - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
+
+  add-nwc-workflows-sf:
+    handler: functions/add-nwc-workflows-sf.handler
+    memorySize: 256
+    timeout: 180
     environment:
       async_metrics: true
     layers:
@@ -550,18 +545,18 @@ functions:
     layers:
       - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
 
-  add-nwc-workflows-expkeys:
-    handler: functions/add-nwc-workflows-expkeys.handler
-    events:
-      - http:
-          path: /nwcworkflows/exportedkeys
-          method: post
-          cors: true
-          authorizer:
-            arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/${ssm:/nintex/${self:custom.stage}/cognito_user_pool_id}
-    memorySize: 256
-    timeout: 180
-    environment:
-      async_metrics: true
-    layers:
-      - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
+  # add-nwc-workflows-expkeys:
+  #   handler: functions/add-nwc-workflows-expkeys.handler
+  #   events:
+  #     - http:
+  #         path: /nwcworkflows/exportedkeys
+  #         method: post
+  #         cors: true
+  #         authorizer:
+  #           arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/${ssm:/nintex/${self:custom.stage}/cognito_user_pool_id}
+  #   memorySize: 256
+  #   timeout: 180
+  #   environment:
+  #     async_metrics: true
+  #   layers:
+  #     - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
