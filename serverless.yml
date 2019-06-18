@@ -545,6 +545,21 @@ functions:
     layers:
       - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
 
+  update-nwcworkflow-monitor:
+    handler: functions/update-nwcworkflow-monitor.handler
+    events:
+      - http:
+          path: /nwcworkflow/monitor
+          method: put
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/${ssm:/nintex/${self:custom.stage}/cognito_user_pool_id}
+    memorySize: 256
+    environment:
+      async_metrics: true
+    layers:
+      - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
+
   # add-nwc-workflows-expkeys:
   #   handler: functions/add-nwc-workflows-expkeys.handler
   #   events:
