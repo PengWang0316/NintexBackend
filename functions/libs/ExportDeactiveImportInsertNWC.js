@@ -13,7 +13,7 @@ const exportDeactiveImportInsertNWC = async (workflows, sub, key, queryAsync, is
     // Add the user id in and export the workflow to an preset account
     workflows[i].push(sub);
     workflows[i].push(exportKey);
-    postActionArr.push(axios.post(process.env.NWC_IMPORT_URL, { key: exportKey, name: `IM${workflows[i][0].substring(0, 8)}` }, { headers: { authorization: `Bearer ${process.env.NWC_AUTO_FETCH_IMPORT_KEY}`, 'content-type': 'application/json' } }));
+    postActionArr.push(axios.post(process.env.NWC_IMPORT_URL, { key: exportKey, name: `${workflows[i][2]} - IM${workflows[i][0].substring(0, 8)}` }, { headers: { authorization: `Bearer ${process.env.NWC_AUTO_FETCH_IMPORT_KEY}`, 'content-type': 'application/json' } }));
     if (isAutoFetching && workflows[i][9] !== 0) postActionArr.push(axios.post(`${process.env.NWC_BASE_URL}${workflows[i][0]}/deactivate`, {}, { headers: { authorization: `Bearer ${key}` } }));
   }
 
