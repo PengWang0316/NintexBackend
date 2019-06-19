@@ -43,7 +43,8 @@ provider:
     log_level: ${self:custom.logLevel.${self:custom.stage}, self:custom.logLevel.default} # The variable for the log function
     STAGE: ${self:custom.stage} # For DEFAULT_CONTEXT in log.js
     FUNCTION_SHIELD_TOKEN: ${ssm:/nintex/${self:custom.stage}/function_shield_token} # For using the Function Shield
-    NWC_AUTO_FETCH_IMPORT_KEY: ${ssm:/nintex/${self:custom.stage}/nwc_auto_fetch-import_key} # For using the Function Shield
+    NWC_AUTO_FETCH_IMPORT_KEY: ${ssm:/nintex/${self:custom.stage}/nwc_auto_fetch-import_key} # For using the import api
+    NWC_AUTO_MONITOR_IMPORT_KEY: ${ssm:/nintex/${self:custom.stage}/nwc_auto_monitor_import_key} # For using the import api
     NWCWORKFLOW_TABLE: NWCWorkflow
     OFFICEWORKFLOW_TABLE: OfficeWorkflow
     WORKFLOWS_TABLE: Workflows
@@ -555,6 +556,22 @@ functions:
           authorizer:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/${ssm:/nintex/${self:custom.stage}/cognito_user_pool_id}
     memorySize: 256
+    environment:
+      async_metrics: true
+    layers:
+      - ${cf:lambda-layers-dev.NintexDependenciesLayerExport}
+
+  import-monitored-workflows:
+    handler: functions/import-monitored-workflows.handler
+    events:
+      - http:
+          path: /nwcworkflow/import
+          method: post
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/${ssm:/nintex/${self:custom.stage}/cognito_user_pool_id}
+    memorySize: 256
+    timeout: 30
     environment:
       async_metrics: true
     layers:
