@@ -21,7 +21,9 @@
       "__tests__/debug_events/"
     ]
   },
-  "dependencies": {},
+  "dependencies": {
+    "nodemailer": "^6.2.1"
+  },
   "devDependencies": {
     "@babel/core": "^7.4.0",
     "@babel/plugin-transform-runtime": "^7.4.0",
